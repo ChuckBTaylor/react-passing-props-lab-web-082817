@@ -1,29 +1,27 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class FilteredFruitList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      items: []
-    };
+const FilteredFruitList = (props) => {
+  console.log(props,'from the list');
+  if(!props.fruit){
+    console.log("ITEMS ARE UNDEFINED HERE");
   }
-
-  componentWillMount() {
-    fetch('/api/fruit')
-      .then(response => response.json())
-      .then(items => this.setState({ items }));
+  const list = !props.filter || props.filter === 'all' ? (props.fruit) : (props.fruit.filter(i => i.fruit_type === props.filter))
+  console.log(list, "the list from the list");
+  if(!list){
+    console.log("LIST IS UNDEFINED HERE");
   }
+  return (
+    <ul className="fruit-list">
+      {list.map((item, index) => <li key={index}>{item.char}</li>)}
+    </ul>
+  );
+}
 
-  render() {
-    const list = !this.props.filter || this.props.filter === 'all' ? this.state.items : this.state.items.filter(i => i.fruit_type === this.props.filter);
-
-    return (
-      <ul className="fruit-list">
-        {list.map((item, index) => <li key={index}>{item.char}</li>)}
-      </ul>
-    );
-  }
+FilteredFruitList.defaultProps = {
+  fruit: 'fruit',
+  list: [],
+  filter: null,
+  items: []
 }
 
 export default FilteredFruitList;
